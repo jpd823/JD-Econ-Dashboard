@@ -39,27 +39,24 @@ def fetch_fred_data(series_id):
 # Layout
 col1, col2 = st.columns(2)
 
+# Shared date range selector
+st.sidebar.header("Global Date Range Selector")
+min_global_date = min(fetch_fred_data(series_id)["date"].min() for series_id in DATA_SOURCES.values())
+max_global_date = max(fetch_fred_data(series_id)["date"].max() for series_id in DATA_SOURCES.values())
+selected_global_range = st.sidebar.slider(
+    "Select Global Date Range", 
+    min_value=min_global_date, 
+    max_value=max_global_date, 
+    value=(min_global_date, max_global_date)
+)
+
 for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
     series_id = url.split("/")[-1]  # Extracting series ID from URL
     df = fetch_fred_data(series_id)
     
     if not df.empty:
-        import datetime  # Ensure datetime module is imported
-        
-        min_date = df["date"].min().date()  # Convert to Python date object
-        max_date = df["date"].max().date()  # Convert to Python date object
-        selected_range = st.slider(
-            f"Select Date Range for {indicator}", 
-            min_value=min_date, 
-            max_value=max_date, 
-            value=(min_date, max_date)
-        )
-        
-        # Filter data based on selected date range
-        filtered_df = df[
-            (df["date"] >= pd.Timestamp(selected_range[0])) & 
-            (df["date"] <= pd.Timestamp(selected_range[1]))
-        ]
+        # Filter data based on shared global date range
+        filtered_df = df[(df["date"] >= selected_global_range[0]) & (df["date"] <= selected_global_range[1])]
         
         # Create figure
         fig = px.line(filtered_df, x="date", y="value", title=indicator)
