@@ -55,6 +55,7 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
                         {"count": 30, "label": "1M", "step": "day", "stepmode": "backward"},
                         {"count": 90, "label": "3M", "step": "day", "stepmode": "backward"},
                         {"count": 365, "label": "1Y", "step": "day", "stepmode": "backward"},
+                        {"count": 3650, "label": "1Y", "step": "day", "stepmode": "backward"},                      
                         {"step": "all"}  # Show full history
                     ]
                 ),
