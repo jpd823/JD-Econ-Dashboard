@@ -44,9 +44,14 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
     df = fetch_fred_data(series_id)
     
     if not df.empty:
+        # Ensure the date range is correctly set by default
+        min_date = df["date"].min()
+        max_date = df["date"].max()
+    
+        # Create the figure
         fig = px.line(df, x="date", y="value", title=indicator)
-        
-        # Adjust Y-axis dynamically based on selected range
+
+        # Add range selector and range slider
         fig.update_layout(
             xaxis=dict(
                 rangeselector=dict(
@@ -60,15 +65,25 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
                 ),
                 rangeslider=dict(visible=True),
                 type="date"
-            ),
-            yaxis=dict(
-                title="Value",
-                autorange=True,  # Enables automatic rescaling when zooming
-                fixedrange=False  # Allows users to zoom in manually
-            )    
+            )
         )
-        
-        if i % 2 == 0:
+
+        # Filter the dataset to match the selected range from the slider
+        @st.experimental_memo
+        def get_visible_data(df, min_date, max_date):
+            return df[(df["date"] >= min_date) & (df["date"] <= max_date)]
+
+        visible_df = get_visible_data(df, min_date, max_date)
+    
+        # Adjust Y-axis dynamically based on the selected range
+        if not visible_df.empty:
+            fig.update_layout(
+                yaxis=dict(
+                    title="Value",
+                    range=[visible_df["value"].min() * 0.9, visible_df["value"].max() * 1.1],  # Scale Y-axis dynamically
+                    fixedrange=False  # Allow manual zooming
+                )
+            )    
             col1.plotly_chart(fig, use_container_width=True)
         else:
             col2.plotly_chart(fig, use_container_width=True)
