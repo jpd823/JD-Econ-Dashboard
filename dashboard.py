@@ -69,8 +69,8 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
             ),
             yaxis=dict(
                 title="Value",
-                range=[y_min, y_max] if y_min is not None and y_max is not None else None,  # Dynamically set Y-axis range
-                fixedrange=False  # Allows users to zoom in on Y-axis manually
+                autorange=True,  # Enables dynamic Y-axis scaling
+                fixedrange=False  # Allows users to manually zoom the Y-axis
             )    
         )
         
