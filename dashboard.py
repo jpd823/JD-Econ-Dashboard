@@ -64,7 +64,11 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
                 rangeslider=dict(visible=True),
                 type="date"
             ),
-            yaxis=dict(autorange=True)  # <---- This makes the Y-axis adjust dynamically
+            yaxis=dict(
+                titel="Value",
+                range=[df["value"].min() * 0.9, df["value"].max() * 1.1],  # Dynamically set Y-axis range
+                fixedrange=False  # Allows users to zoom in on Y-axis manually
+            )    
         )
 
         # Display the chart in alternating columns
