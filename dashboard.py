@@ -39,35 +39,14 @@ def fetch_fred_data(series_id):
 # Layout
 col1, col2 = st.columns(2)
 
-# Shared date range selector
-st.sidebar.header("Global Date Range Selector")
-min_global_date = min(fetch_fred_data(series_id)["date"].min() for series_id in DATA_SOURCES.values())
-max_global_date = max(fetch_fred_data(series_id)["date"].max() for series_id in DATA_SOURCES.values())
-selected_global_range = st.sidebar.slider(
-    "Select Global Date Range", 
-    min_value=min_global_date, 
-    max_value=max_global_date, 
-    value=(min_global_date, max_global_date)
-)
-
 for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
     series_id = url.split("/")[-1]  # Extracting series ID from URL
     df = fetch_fred_data(series_id)
     
     if not df.empty:
-        # Filter data based on shared global date range
-        filtered_df = df[(df["date"] >= selected_global_range[0]) & (df["date"] <= selected_global_range[1])]
+        fig = px.line(df, x="date", y="value", title=indicator)
         
-        # Create figure
-        fig = px.line(filtered_df, x="date", y="value", title=indicator)
-        
-        # Adjust Y-axis dynamically based on selected range
-        if not filtered_df.empty:
-            y_min = filtered_df["value"].min() * 0.9
-            y_max = filtered_df["value"].max() * 1.1
-        else:
-            y_min, y_max = None, None
-        
+        # Add interactive range slider
         fig.update_layout(
             xaxis=dict(
                 rangeselector=dict(
@@ -84,7 +63,7 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
             ),
             yaxis=dict(
                 title="Value",
-                range=[y_min, y_max] if y_min is not None and y_max is not None else None,
+                autorange=True,  # Enables full dynamic Y-axis scaling
                 fixedrange=False  # Allows users to zoom in manually
             )    
         )
