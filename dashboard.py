@@ -63,9 +63,9 @@ fig.update_layout(
     )
 )
        
-        if i % 2 == 0:
+    if i % 2 == 0:
             col1.plotly_chart(fig, use_container_width=True)
-        else:
+    else:
             col2.plotly_chart(fig, use_container_width=True)
     else:
         st.warning(f"Could not fetch data for {indicator}")
