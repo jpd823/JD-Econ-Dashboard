@@ -23,7 +23,7 @@ DATA_SOURCES = {
 
 # Function to fetch data from FRED API
 def fetch_fred_data(series_id):
-    api_key = c303b0128dd09ac48e3b3fbc6fe281b0
+    api_key = "c303b0128dd09ac48e3b3fbc6fe281b0"
     url = f"https://api.stlouisfed.org/fred/series/observations?series_id={series_id}&api_key={api_key}&file_type=json"
     response = requests.get(url)
     data = response.json()
