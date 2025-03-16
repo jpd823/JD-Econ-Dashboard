@@ -63,15 +63,10 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
             ),
             yaxis=dict(
                 title="Value",
+                autorange=True,  # Enables automatic rescaling when zooming
                 fixedrange=False  # Allows users to zoom in manually
             )    
         )
-        
-        # Set up callback function to dynamically adjust Y-axis
-        if not df.empty:
-            selected_range = df[(df["date"] >= df["date"].min()) & (df["date"] <= df["date"].max())]
-            if not selected_range.empty:
-                fig.update_layout(yaxis=dict(range=[selected_range["value"].min() * 0.9, selected_range["value"].max() * 1.1]))
         
         if i % 2 == 0:
             col1.plotly_chart(fig, use_container_width=True)
