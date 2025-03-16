@@ -50,6 +50,15 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
         fig = px.line(df, x="date", y="value", title=indicator)
 
         # Add interactive range slider
+        # Ensure there are valid numeric values before setting the Y-axis range
+        if not df.empty and df["value"].dtype in ["int64", "float64"]:
+            y_min = df["value"].min() * 0.9
+            y_max = df["value"].max() * 1.1
+        else:
+            y_min, y_max = None, None  # Let Plotly auto-scale if data is missing
+        
+        
+        
         fig.update_layout(
             xaxis=dict(
                 rangeselector=dict(
