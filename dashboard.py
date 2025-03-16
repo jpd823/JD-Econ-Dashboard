@@ -56,7 +56,10 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
         )
         
         # Filter data based on selected date range
-        filtered_df = df[(df["date"] >= selected_range[0]) & (df["date"] <= selected_range[1])]
+        filtered_df = df[
+            (df["date"] >= pd.Timestamp(selected_range[0])) & 
+            (df["date"] <= pd.Timestamp(selected_range[1]))
+        ]
         
         # Create figure
         fig = px.line(filtered_df, x="date", y="value", title=indicator)
