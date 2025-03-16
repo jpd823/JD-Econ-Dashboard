@@ -10,6 +10,7 @@ st.title("Real-Time Economic Indicators Dashboard")
 # Define data sources
 DATA_SOURCES = {
     "US Gross Domestic Product": "https://fred.stlouisfed.org/series/GDP",
+    "CPI less Food & Energy": "https://fred.stlouisfed.org/series/CORESTICKM159SFRBATL",
     "Auto Loan Delinquencies": "https://fred.stlouisfed.org/series/DSPDYEI",
     "Credit Card Delinquencies": "https://fred.stlouisfed.org/series/DRCCLACBS",
     "Mortgage Delinquencies": "https://fred.stlouisfed.org/series/DRSFRMACBS",
