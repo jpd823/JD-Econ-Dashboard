@@ -45,6 +45,23 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
     
     if not df.empty:
         fig = px.line(df, x="date", y="value", title=indicator)
+
+        # Add interactive range slider
+fig.update_layout(
+    xaxis=dict(
+        rangeselector=dict(
+            buttons=[
+                {"count": 7, "label": "1W", "step": "day", "stepmode": "backward"},
+                {"count": 30, "label": "1M", "step": "day", "stepmode": "backward"},
+                {"count": 90, "label": "3M", "step": "day", "stepmode": "backward"},
+                {"count": 365, "label": "1Y", "step": "day", "stepmode": "backward"},
+                {"step": "all"}  # Show full history
+            ]
+        ),
+        rangeslider=dict(visible=True),
+        type="date"
+    )
+)
         if i % 2 == 0:
             col1.plotly_chart(fig, use_container_width=True)
         else:
