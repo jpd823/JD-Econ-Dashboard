@@ -46,7 +46,12 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
     if not df.empty:
         min_date = df["date"].min()
         max_date = df["date"].max()
-        selected_range = st.slider(f"Select Date Range for {indicator}", min_value=min_date, max_value=max_date, value=(min_date, max_date))
+        selected_range = st.slider(
+            f"Select Date Range for {indicator}", 
+            min_value=min_date, 
+            max_value=max_date, 
+            value=(min_date, max_date)
+        )
         
         # Filter data based on selected date range
         filtered_df = df[(df["date"] >= selected_range[0]) & (df["date"] <= selected_range[1])]
