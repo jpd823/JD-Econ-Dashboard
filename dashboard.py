@@ -62,6 +62,7 @@ fig.update_layout(
         type="date"
     )
 )
+       
         if i % 2 == 0:
             col1.plotly_chart(fig, use_container_width=True)
         else:
