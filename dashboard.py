@@ -11,7 +11,7 @@ st.title("Real-Time Economic Indicators Dashboard")
 DATA_SOURCES = {
     "Auto Loan Delinquencies": "https://fred.stlouisfed.org/series/DSPDYEI",
     "Credit Card Delinquencies": "https://fred.stlouisfed.org/series/DRCCLACBS",
-    "Mortgage Delinquencies": "https://fred.stlouisfed.org/series/MORTGAGE30US",
+    "Mortgage Delinquencies": "https://fred.stlouisfed.org/series/DRSFRMACBS",
     "Housing Starts": "https://fred.stlouisfed.org/series/HOUST",
     "ISM Manufacturing PMI": "https://fred.stlouisfed.org/series/NAPM",
     "Corporate Bond Yield Spreads": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
