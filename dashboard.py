@@ -44,8 +44,10 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
     df = fetch_fred_data(series_id)
     
     if not df.empty:
-        min_date = df["date"].min()
-        max_date = df["date"].max()
+        import datetime  # Ensure datetime module is imported
+        
+        min_date = df["date"].min().date()  # Convert to Python date object
+        max_date = df["date"].max().date()  # Convert to Python date object
         selected_range = st.slider(
             f"Select Date Range for {indicator}", 
             min_value=min_date, 
