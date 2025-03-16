@@ -48,8 +48,8 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
         
         # Ensure there are valid numeric values before setting the Y-axis range
         if not df.empty and df["value"].dtype in ["int64", "float64"]:
-            y_min = df["value"].min() * 0.9
-            y_max = df["value"].max() * 1.1
+            y_min = df.loc[df["date"] >= df["date"].max() - pd.DateOffset(months=3), "value"].min() * 0.9
+            y_max = df.loc[df["date"] >= df["date"].max() - pd.DateOffset(months=3), "value"].max() * 1.1
         else:
             y_min, y_max = None, None  # Let Plotly auto-scale if data is missing
         
@@ -69,8 +69,8 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
             ),
             yaxis=dict(
                 title="Value",
-                autorange=True,  # Enables dynamic Y-axis scaling
-                fixedrange=False  # Allows users to manually zoom the Y-axis
+                range=[y_min, y_max] if y_min is not None and y_max is not None else None,  # Dynamically set Y-axis range
+                fixedrange=False  # Allows users to zoom in on Y-axis manually
             )    
         )
         
