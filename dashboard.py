@@ -36,6 +36,21 @@ def fetch_fred_data(series_id):
     else:
         return pd.DataFrame(columns=["date", "value"])
 
+# Master range selector toggle
+use_master_range = st.checkbox("Use master date range selector", value=False)
+
+# Global date range selector
+if use_master_range:
+    all_dates = [fetch_fred_data(series_id)["date"] for series_id in DATA_SOURCES.values()]
+    min_global_date = min([df.min() for df in all_dates if not df.empty])
+    max_global_date = max([df.max() for df in all_dates if not df.empty])
+    selected_global_range = st.slider(
+        "Select Global Date Range", 
+        min_value=min_global_date, 
+        max_value=max_global_date, 
+        value=(min_global_date, max_global_date)
+    )
+
 # Layout
 col1, col2 = st.columns(2)
 
@@ -44,6 +59,10 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
     df = fetch_fred_data(series_id)
     
     if not df.empty:
+        # Apply master date range filter if enabled
+        if use_master_range:
+            df = df[(df["date"] >= selected_global_range[0]) & (df["date"] <= selected_global_range[1])]
+        
         fig = px.line(df, x="date", y="value", title=indicator)
         
         # Add interactive range slider
@@ -55,8 +74,6 @@ for i, (indicator, url) in enumerate(DATA_SOURCES.items()):
                         {"count": 30, "label": "1M", "step": "day", "stepmode": "backward"},
                         {"count": 90, "label": "3M", "step": "day", "stepmode": "backward"},
                         {"count": 365, "label": "1Y", "step": "day", "stepmode": "backward"},
-                        {"count": 3650, "label": "10Y", "step": "day", "stepmode": "backward"},
-                        {"count": 7300, "label": "20Y", "step": "day", "stepmode": "backward"},                      
                         {"step": "all"}  # Show full history
                     ]
                 ),
