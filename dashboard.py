@@ -39,17 +39,24 @@ def fetch_fred_data(series_id):
 # Master range selector toggle
 use_master_range = st.checkbox("Use master date range selector", value=False)
 
-# Global date range selector
+# Global date range selector with predefined ranges
 if use_master_range:
     all_dates = [fetch_fred_data(series_id)["date"] for series_id in DATA_SOURCES.values()]
     min_global_date = min([df.min() for df in all_dates if not df.empty])
     max_global_date = max([df.max() for df in all_dates if not df.empty])
-    selected_global_range = st.slider(
-        "Select Global Date Range", 
-        min_value=min_global_date, 
-        max_value=max_global_date, 
-        value=(min_global_date, max_global_date)
-    )
+    
+    range_selection = st.selectbox("Select Global Range", ["1W", "1M", "3M", "1Y", "All"], index=4)
+    
+    if range_selection == "1W":
+        selected_global_range = (max_global_date - pd.DateOffset(weeks=1), max_global_date)
+    elif range_selection == "1M":
+        selected_global_range = (max_global_date - pd.DateOffset(months=1), max_global_date)
+    elif range_selection == "3M":
+        selected_global_range = (max_global_date - pd.DateOffset(months=3), max_global_date)
+    elif range_selection == "1Y":
+        selected_global_range = (max_global_date - pd.DateOffset(years=1), max_global_date)
+    else:
+        selected_global_range = (min_global_date, max_global_date)
 
 # Layout
 col1, col2 = st.columns(2)
